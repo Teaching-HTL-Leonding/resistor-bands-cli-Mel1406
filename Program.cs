@@ -15,7 +15,11 @@ const string INVALID_COLOR = "There was an invalid color Code. Please use the fi
 
 #region program
 Console.OutputEncoding = System.Text.Encoding.Default;
-if (!CheckHyphens(input))
+if (args.Length != 1)
+{
+    Console.WriteLine("Wrong number of arguments.");
+}
+else if (!CheckHyphens(input))
 {
     Console.WriteLine("You didn't place the hyphens right.");
 }
@@ -28,7 +32,7 @@ else if (LENGTH_FIVE_BANDS == input.Length)
         && TryGetToleranceFromColor(input.Substring(FIFTH, LENGTH), out double toleranceValue))
     {
         Decode5ColorBands(colorValue1, colorValue2, colorValue3, multiplier, toleranceValue, out double colorCodeValue, out string tolerance);
-        Console.WriteLine($"Resistance: {colorCodeValue}Ω\n\rTolerance: {tolerance}");
+        Console.WriteLine($"Resistance: {colorCodeValue.ToString("N2")}Ω\n\rTolerance: {tolerance}");
     }
     else
     {
@@ -37,10 +41,13 @@ else if (LENGTH_FIVE_BANDS == input.Length)
 }
 else if (LENGTH_FOUR_BANDS == input.Length)
 {
-    if (TryConvertColorToDigit(input.Substring(FIRST, LENGTH), out int colorValue1) && TryConvertColorToDigit(input.Substring(SECOND, LENGTH), out int colorValue2) && TryGetMultiplierFromColor(input.Substring(THIRD, LENGTH), out double multiplier) && TryGetToleranceFromColor(input.Substring(FOURTH, LENGTH), out double toleranceValue))
+    if (TryConvertColorToDigit(input.Substring(FIRST, LENGTH), out int colorValue1)
+    && TryConvertColorToDigit(input.Substring(SECOND, LENGTH), out int colorValue2)
+    && TryGetMultiplierFromColor(input.Substring(THIRD, LENGTH), out double multiplier)
+    && TryGetToleranceFromColor(input.Substring(FOURTH, LENGTH), out double toleranceValue))
     {
         Decode4ColorBands(colorValue1, colorValue2, multiplier, toleranceValue, out double colorCodeValue, out string tolerance);
-        Console.WriteLine($"Resistance: {colorCodeValue}Ω\n\rTolerance: {tolerance}");
+        Console.WriteLine($"Resistance: {colorCodeValue.ToString("N2")}Ω\n\rTolerance: {tolerance}");
     }
     else
     {
@@ -101,7 +108,7 @@ bool TryGetToleranceFromColor(string color, out double tolerance) =>
         "Sil" => 10,
         _ => -1
     }) != -1;
-    
+
 void Decode4ColorBands(int colorCodeValue1, int colorCodeValue2, double multiplier, double toleranceValue, out double colorCodeValue, out string tolerance)
 {
     colorCodeValue = (colorCodeValue1 * 10 + colorCodeValue2) * multiplier;
@@ -119,5 +126,5 @@ bool CheckHyphens(string input)
         if ((i + 1) % 4 == 0 && input[i] != '-') { return false; }
     }
     return true;
-}   
+}
 #endregion
